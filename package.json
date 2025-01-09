@@ -1,0 +1,96 @@
+{
+  "name": "code-aligner",
+  "displayName": "Code Aligner",
+  "description": "Multi language code align with the default seperator or you defined.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:php",
+    "onLanguage:python",
+    "onLanguage:typescript",
+    "onLanguage:golang",
+    "onLanguage:javascript"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages":[
+      {
+        "id": "php",
+        "aliases": [
+          "php", "PHP"
+        ],
+        "extensions": [
+          ".php"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "codeAligner.alignSelected",
+        "title": "Align Selected Code"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Code Aligner Configuration",
+      "properties": {
+        "codeAligner.rules": {
+          "type": "object",
+          "default": {
+            "php": ["=", "=>"],
+            "python": ["="],
+            "typescript": ["=", ":"],
+            "golang": [":=", "="],
+            "javascript": ["="]
+          },
+          "description": "Define alignment characters for each language."
+        },
+        "codeAligner.autoFormatOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable auto-format on save."
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "codeAligner.alignSelected",
+        "key": "ctrl+alt+a",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run package",
+    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "esbuild": "^0.24.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.2",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  },
+  "packageManager": "pnpm@9.15.3+sha512.1f79bc245a66eb0b07c5d4d83131240774642caaa86ef7d0434ab47c0d16f66b04e21e0c086eb61e62c77efc4d7f7ec071afad3796af64892fae66509173893a"
+}
